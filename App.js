@@ -11,26 +11,17 @@ import MapboxGL from '@react-native-mapbox-gl/maps';
 import {MAPBOX_ACCESS_TOKEN, STYLE_URL} from '@env';
 MapboxGL.setAccessToken(MAPBOX_ACCESS_TOKEN);
 
-import {
-  SafeAreaView,
-  StyleSheet,
-  View,
-} from 'react-native';
+import {StyleSheet, View} from 'react-native';
+import MapView from './src/components/Map';
 
-export default class App extends Component {
-  componentDidMount() {
-    MapboxGL.setTelemetryEnabled(false);
-  }
+export default function App() {
+  MapboxGL.setTelemetryEnabled(false);
 
-  render() {
-    return (
-      <View style={styles.page}>
-        <View style={styles.container}>
-          <MapboxGL.MapView style={styles.map} />
-        </View>
-      </View>
-    );
-  }
+  return (
+    <View style={styles.page}>
+      <MapView />
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
@@ -39,13 +30,5 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#F5FCFF',
-  },
-  container: {
-    height: '100%',
-    width: '100%',
-    backgroundColor: 'tomato',
-  },
-  map: {
-    flex: 1,
   },
 });
