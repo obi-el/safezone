@@ -9,6 +9,7 @@ export default StyleSheet.create({
     justifyContent: 'center',
     top: 0,
     zIndex: 1,
+    flex: 1,
   },
   filterItem: {
     margin: 40,

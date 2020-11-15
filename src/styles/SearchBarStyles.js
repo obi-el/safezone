@@ -3,11 +3,19 @@ import {StyleSheet} from 'react-native';
 export default StyleSheet.create({
   container: {
     flex: 1,
+    position: 'absolute',
+    bottom: 0,
+    width: '100%',
   },
   searchItem: {
-    padding: 5,
+    margin: 3,
+    backgroundColor: 'rgba(119, 92, 255, 0.2)',
+    borderColor: 'purple',
   },
   searchList: {
+  },
+  searchText: {
+    color: 'rgb(6,69,173)',
   },
   searchInput: {
     fontSize: 15,
@@ -22,5 +30,6 @@ export default StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: 'white',
   },
 });

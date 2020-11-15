@@ -17,7 +17,7 @@ import {
 
 const Item = ({item, onPress}) => (
   <TouchableOpacity onPress={onPress} style={SearchBarStyles.searchItem}>
-    <Text>{item.placeName}</Text>
+    <Text style={SearchBarStyles.searchText}>{item.placeName}</Text>
   </TouchableOpacity>
 );
 
@@ -88,6 +88,7 @@ export default function SearchBar(props) {
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
+      style={SearchBarStyles.container}
     >
       <FlatList
         renderItem={renderItem}

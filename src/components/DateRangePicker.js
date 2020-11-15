@@ -14,7 +14,6 @@ const DatePicker = (props) => {
       value={new Date(dateValue)}
       mode={'date'}
       display={'default'}
-      textColor={'purple'}
       style={DatePickerStyles.filterItem}
       maximumDate={new Date(maximumDate)} // From: To date is the max, To: todays date is the max
       minimumDate={minimumDate && new Date(minimumDate)} // From: no minimum, To: the fromDate is minimum
