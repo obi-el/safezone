@@ -3,17 +3,21 @@ import MapboxGL, {MarkerView} from '@react-native-mapbox-gl/maps';
 import Geolocation from '@react-native-community/geolocation';
 import {View, Alert} from 'react-native';
 import mapStyles from '../styles/MapStyles';
+import SearchBar from './SearchBar';
+import DateRangePicker from './DateRangePicker';
+
+//Convert returned geolocation position to [long,lat] array
+const _getLongLat = (position) => {
+  return [position.coords.longitude, position.coords.latitude];
+};
+
 
 export default function MapView() {
-  const getLongLat = (position) => {
-    return [position.coords.longitude, position.coords.latitude];
-  };
-
   const [userPosition, setUserPosition] = React.useState(null);
 
   this.watchId = Geolocation.watchPosition(
     (position) => {
-      setUserPosition(getLongLat(position));
+      setUserPosition(_getLongLat(position));
     },
     (error) => Alert.alert('Error', JSON.stringify(error)),
     {
@@ -26,7 +30,7 @@ export default function MapView() {
   React.useEffect(() => {
     Geolocation.getCurrentPosition(
       (position) => {
-        setUserPosition(getLongLat(position));
+        setUserPosition(_getLongLat(position));
       },
       (error) => Alert.alert('Error', JSON.stringify(error)),
       {enableHighAccuracy: true},
@@ -41,6 +45,7 @@ export default function MapView() {
 
   return (
     <View style={mapStyles.mapContainer}>
+      <DateRangePicker />
       <MapboxGL.MapView style={mapStyles.map}>
         <MapboxGL.Camera
           zoomLevel={16}
@@ -49,6 +54,7 @@ export default function MapView() {
         />
         <MarkerView coordinate={userPosition}></MarkerView>
       </MapboxGL.MapView>
+      <SearchBar limit={3} userCoords={userPosition} />
     </View>
   );
 }

@@ -4,7 +4,8 @@ export default StyleSheet.create({
   mapContainer: {
     height: '100%',
     width: '100%',
-    backgroundColor: 'tomato',
+    backgroundColor: 'transparent',
+    position: 'relative',
   },
   map: {
     flex: 1,
