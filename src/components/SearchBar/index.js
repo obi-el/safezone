@@ -1,6 +1,6 @@
 import React from 'react';
 import {MAPBOX_ACCESS_TOKEN, MB_SEARCH_BASE_URL} from '@env';
-import SearchBarStyles from '../styles/SearchBarStyles';
+import SearchBarStyles from './SearchBarStyles';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faSearchLocation} from '@fortawesome/free-solid-svg-icons';
 import {
@@ -22,10 +22,7 @@ const Item = ({item, onPress}) => (
 );
 
 export default function SearchBar(props) {
-  const {
-    limit,
-    userCoords,
-  } = props;
+  const {limit, userCoords} = props;
 
   const [isRefreshing, changeRefresh] = React.useState(false);
 
@@ -48,7 +45,7 @@ export default function SearchBar(props) {
       removeSemiColonValue,
     )}.json?${encodedParams}`;
 
-    console.log(searchUri);
+    console.debug(`Search Link: ${searchUri}`);
 
     fetch(searchUri)
       .then((response) => response.json())
@@ -87,7 +84,7 @@ export default function SearchBar(props) {
 
   return (
     <KeyboardAvoidingView
-      behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={SearchBarStyles.container}
     >
       <FlatList

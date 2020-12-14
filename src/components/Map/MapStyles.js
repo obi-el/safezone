@@ -6,6 +6,7 @@ export default StyleSheet.create({
     width: '100%',
     backgroundColor: 'transparent',
     position: 'relative',
+    flex: 1,
   },
   map: {
     flex: 1,
