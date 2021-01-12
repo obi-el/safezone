@@ -3,8 +3,10 @@ import {StyleSheet, Platform} from 'react-native';
 export default StyleSheet.create({
   container: {
     position: 'absolute',
-    bottom: 0,
+    bottom: '10%',
     width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   searchItem: {
     margin: 3,
@@ -24,7 +26,6 @@ export default StyleSheet.create({
     ...Platform.select({
       ios: {
         margin: 10,
-        height: 30,
       },
       android: {
         margin: 0,
@@ -43,5 +44,9 @@ export default StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: 'white',
+    borderRadius: 50,
+    borderColor: 'rgb(6,69,173)',
+    borderWidth: 1,
+    paddingLeft: 2,
   },
 });

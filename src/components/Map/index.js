@@ -1,5 +1,5 @@
 import React from 'react';
-import MapboxGL, {MarkerView} from '@react-native-mapbox-gl/maps';
+import MapboxGL from '@react-native-mapbox-gl/maps';
 import Geolocation from '@react-native-community/geolocation';
 import {View, Alert} from 'react-native';
 import mapStyles from './MapStyles';
@@ -12,6 +12,7 @@ const _getLongLat = (position) => {
 };
 
 export default function MapView() {
+  const [markerItem, setMarkerItem] = React.useState(null);
   const [userPosition, setUserPosition] = React.useState(null);
 
   this.watchId = Geolocation.watchPosition(
@@ -34,7 +35,7 @@ export default function MapView() {
       (error) => Alert.alert('Error', JSON.stringify(error)),
       {
         enableHighAccuracy: true,
-        useSignificantChanges: true
+        useSignificantChanges: true,
       },
     );
   }, []);
@@ -52,11 +53,22 @@ export default function MapView() {
         <MapboxGL.Camera
           zoomLevel={16}
           coordinate={userPosition}
-          centerCoordinate={userPosition}
+          centerCoordinate={markerItem ? markerItem.coords : userPosition}
         />
-        <MarkerView coordinate={userPosition}></MarkerView>
+        <MapboxGL.PointAnnotation
+          id={'user-location'}
+          coordinate={userPosition}
+          snippet={'You'}
+        />
+        <MapboxGL.MarkerView
+          coordinate={markerItem ? markerItem.coords : null}
+        />
       </MapboxGL.MapView>
-      <SearchBar limit={4} userCoords={userPosition} />
+      <SearchBar
+        limit={10}
+        userCoords={userPosition}
+        onSearchSelected={setMarkerItem}
+      />
     </View>
   );
 }

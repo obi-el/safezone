@@ -21,8 +21,45 @@ const Item = ({item, onPress}) => (
   </TouchableOpacity>
 );
 
+const fetchSearchResults = async (
+  searchValue,
+  userCoords,
+  limit,
+  onFetchResults,
+) => {
+  let removeSemiColonValue = searchValue.replace(/;*/gi, '');
+  let encodedParams = `limit=${limit}&proximity=${encodeURIComponent(
+    userCoords,
+  )}&access_token=${MAPBOX_ACCESS_TOKEN}`;
+
+  let searchUri = `${MB_SEARCH_BASE_URL}/${encodeURIComponent(
+    removeSemiColonValue,
+  )}.json?${encodedParams}`;
+
+  console.debug(`Search Link: ${searchUri}`);
+
+  return fetch(searchUri)
+    .then((response) => response.json())
+    .then((response) => {
+      return response.features.map((feature) => ({
+        id: feature.id,
+        placeName: feature.place_name,
+        coords: feature.geometry.coordinates,
+      }));
+    })
+    .then((data) => {
+      onFetchResults(data);
+    })
+    .catch((error) => {
+      console.debug(error);
+      Alert.alert(`Error Searching For Value: ${searchValue}`, 'Sorry!');
+    });
+};
+
 export default function SearchBar(props) {
-  const {limit, userCoords} = props;
+  const {limit, userCoords, onSearchSelected} = props;
+
+  let searchTimeout;
 
   const [isRefreshing, changeRefresh] = React.useState(false);
 
@@ -30,50 +67,36 @@ export default function SearchBar(props) {
 
   const [searchValue, setSearchValue] = React.useState('');
 
-  React.useEffect(() => {
-    if (!searchValue) {
+  const debouncedFetchSearchResults = (searchText) => {
+    searchTimeout && clearTimeout(searchTimeout);
+    searchTimeout = setTimeout(
+      () => fetchSearchResults(searchText, userCoords, limit, setSearchResult),
+      1500,
+    );
+  };
+
+  const memoizedFetch = React.useCallback((searchText) => {
+    if (!searchText) {
+      searchTimeout && clearTimeout(searchTimeout);
+      setSearchValue('');
       setSearchResult([]);
       return;
+    } else {
+      changeRefresh(true);
+
+      debouncedFetchSearchResults(searchText);
+
+      changeRefresh(false);
     }
-    changeRefresh(true);
-    let removeSemiColonValue = searchValue.replace(/;*/gi, '');
-    let encodedParams = `limit=${limit}&proximity=${encodeURIComponent(
-      userCoords,
-    )}&access_token=${MAPBOX_ACCESS_TOKEN}`;
-
-    let searchUri = `${MB_SEARCH_BASE_URL}/${encodeURIComponent(
-      removeSemiColonValue,
-    )}.json?${encodedParams}`;
-
-    console.debug(`Search Link: ${searchUri}`);
-
-    fetch(searchUri)
-      .then((response) => response.json())
-      .then((response) => {
-        let data = response.features.map((feature) => ({
-          id: feature.id,
-          placeName: feature.place_name,
-          coords: feature.geometry.coordinates,
-        }));
-        setSearchResult(data);
-      })
-      .catch((error) => Alert.alert('Error', JSON.stringify(error)))
-      .finally(() => changeRefresh(false));
-  }, [searchValue]);
-
-  let searchTimeout;
-
-  const debouncedOnChangeText = (text) => {
-    searchTimeout && clearTimeout(searchTimeout);
-    searchTimeout = setTimeout(() => setSearchValue(text), 1000);
-  };
+  }, []);
 
   const renderItem = ({item}) => {
     return (
       <Item
         item={item}
         onPress={() => {
-          Alert.alert('LOCATION', item.placeName);
+          onSearchSelected(item);
+          setSearchValue(item.placeName);
           searchTimeout && clearTimeout(searchTimeout);
           setSearchResult([]);
           Keyboard.dismiss();
@@ -86,6 +109,11 @@ export default function SearchBar(props) {
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={SearchBarStyles.container}
+      keyboardVerticalOffset={Platform.select({
+        ios: '10',
+        android: '0',
+        default: '0',
+      })}
     >
       <FlatList
         renderItem={renderItem}
@@ -93,7 +121,7 @@ export default function SearchBar(props) {
         refreshing={isRefreshing}
         keyExtractor={(item) => item.id}
         data={searchResult}
-        keyboardShouldPersistTaps={'always'}
+        keyboardShouldPersistTaps={'handled'}
         style={SearchBarStyles.searchList}
       />
       <View style={SearchBarStyles.iconPlusSearchInput}>
@@ -104,14 +132,22 @@ export default function SearchBar(props) {
         />
         <TextInput
           placeholder={'Search'}
-          onChangeText={(text) => debouncedOnChangeText(text)}
+          returnKeyType={'search'}
+          blurOnSubmit={false}
+          value={searchValue}
+          onChangeText={(text) => {
+            setSearchValue(text);
+            memoizedFetch(text);
+          }}
           placeholderTextColor={'lightgray'}
           maxLength={256}
           autoCompleteType={'off'}
           style={SearchBarStyles.searchInput}
           onSubmitEditing={(nativeObj) => {
-            console.log(nativeObj.nativeEvent.text, 'TEXT');
-            setSearchValue(nativeObj.nativeEvent.text || '');
+            const {text} = nativeObj.nativeEvent;
+            setSearchValue(text || '');
+            text && memoizedFetch(text);
+            !text && Keyboard.dismiss();
           }}
         />
       </View>

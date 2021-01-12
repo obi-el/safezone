@@ -11,6 +11,7 @@ const {Navigation} = require('react-native-navigation');
 export default function HomePage(props) {
   return (
     <View style={PageStyles.page}>
+      <Map />
       <View style={HomeAppBarStyles.appbar}>
         <Pressable
           onPress={() => {
@@ -37,7 +38,6 @@ export default function HomePage(props) {
         </Pressable>
         <DateRangePicker />
       </View>
-      <Map />
     </View>
   );
 }

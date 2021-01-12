@@ -1,23 +1,14 @@
-import {StyleSheet, Platform} from 'react-native';
+import {StyleSheet} from 'react-native';
 
 export default StyleSheet.create({
   appbar: {
     position: 'absolute',
-    width: '100%',
+    width: '90%',
     flexDirection: 'row',
+    justifyContent: 'center',
     alignItems: 'center',
     zIndex: 1,
-    ...Platform.select({
-      ios: {
-        top: 20,
-      },
-      android: {
-        top: 20,
-      },
-      default: {
-        top: 50,
-      },
-    }),
+    bottom: '15%',
   },
   settingsIcon: {
     flex: 1,

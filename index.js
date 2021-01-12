@@ -32,14 +32,7 @@ Navigation.events().registerAppLaunchedListener(() => {
           {
             component: {
               name: 'Home',
-              options: {
-                topBar: {
-                  title: {
-                    text: appName,
-                    color: 'black',
-                  },
-                },
-              },
+              options:{ topBar: { visible: false, height: 0, } }
             },
           },
         ],

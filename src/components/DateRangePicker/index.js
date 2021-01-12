@@ -18,9 +18,11 @@ const DatePicker = (props) => {
       maximumDate={new Date(maximumDate)} // From: To date is the max, To: todays date is the max
       minimumDate={minimumDate && new Date(minimumDate)} // From: no minimum, To: the fromDate is minimum
       onChange={(event, newDate) => {
-        const newTimestamp = newDate.getTime();
-        setDateValue(newTimestamp);
-        onUpdate(newTimestamp);
+        if (newDate) {
+          const newTimestamp = newDate.getTime();
+          setDateValue(newTimestamp);
+          onUpdate(newTimestamp);
+        }
       }}
     />
   );

@@ -11,7 +11,7 @@ export default StyleSheet.create({
   },
   filterItem: {
     width: '30%',
-    backgroundColor: 'rgba(139,146,132,0.2)',
+    backgroundColor: 'white',
   },
   filterIcon: {
     color: 'rgb(6,69,173)',
