@@ -333,8 +333,6 @@ PODS:
   - RealmJS (10.0.1):
     - GCDWebServer
     - React
-  - RNCAsyncStorage (1.13.2):
-    - React
   - RNCMaskedView (0.1.10):
     - React
   - RNDateTimePicker (3.0.4):
@@ -403,7 +401,6 @@ DEPENDENCIES:
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - ReactNativeNavigation (from `../node_modules/react-native-navigation`)
   - RealmJS (from `../node_modules/realm`)
-  - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
   - "RNCMaskedView (from `../node_modules/@react-native-community/masked-view`)"
   - "RNDateTimePicker (from `../node_modules/@react-native-community/datetimepicker`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
@@ -492,8 +489,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-navigation"
   RealmJS:
     :path: "../node_modules/realm"
-  RNCAsyncStorage:
-    :path: "../node_modules/@react-native-async-storage/async-storage"
   RNCMaskedView:
     :path: "../node_modules/@react-native-community/masked-view"
   RNDateTimePicker:
@@ -555,7 +550,6 @@ SPEC CHECKSUMS:
   ReactCommon: 4167844018c9ed375cc01a843e9ee564399e53c3
   ReactNativeNavigation: 91c082139a6ee8ef7d5c04c70995fdd2e8ababc9
   RealmJS: 5c2e37124c889c405c92b76f0d83bce07ca228f8
-  RNCAsyncStorage: bc2f81cc1df90c267ce9ed30bb2dbc93b945a8ee
   RNCMaskedView: f5c7d14d6847b7b44853f7acb6284c1da30a3459
   RNDateTimePicker: 88dc10d685ce961339bad3353c64db96c5abd19b
   RNGestureHandler: 9b7e605a741412e20e13c512738a31bd1611759b

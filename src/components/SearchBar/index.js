@@ -21,12 +21,7 @@ const Item = ({item, onPress}) => (
   </TouchableOpacity>
 );
 
-const fetchSearchResults = async (
-  searchValue,
-  userCoords,
-  limit,
-  onFetchResults,
-) => {
+const fetchSearchResults = (searchValue, userCoords, limit, onFetchResults) => {
   let removeSemiColonValue = searchValue.replace(/;*/gi, '');
   let encodedParams = `limit=${limit}&proximity=${encodeURIComponent(
     userCoords,
@@ -67,12 +62,12 @@ export default function SearchBar(props) {
 
   const [searchValue, setSearchValue] = React.useState('');
 
-  const debouncedFetchSearchResults = (searchText) => {
+  const debouncedFetchSearchResults = (searchText, onSearched) => {
     searchTimeout && clearTimeout(searchTimeout);
-    searchTimeout = setTimeout(
-      () => fetchSearchResults(searchText, userCoords, limit, setSearchResult),
-      1500,
-    );
+    searchTimeout = setTimeout(() => {
+      fetchSearchResults(searchText, userCoords, limit, setSearchResult);
+      onSearched(false);
+    }, 1500);
   };
 
   const memoizedFetch = React.useCallback((searchText) => {
@@ -80,13 +75,9 @@ export default function SearchBar(props) {
       searchTimeout && clearTimeout(searchTimeout);
       setSearchValue('');
       setSearchResult([]);
-      return;
     } else {
       changeRefresh(true);
-
-      debouncedFetchSearchResults(searchText);
-
-      changeRefresh(false);
+      debouncedFetchSearchResults(searchText, changeRefresh);
     }
   }, []);
 
@@ -111,7 +102,7 @@ export default function SearchBar(props) {
       style={SearchBarStyles.container}
       keyboardVerticalOffset={Platform.select({
         ios: '10',
-        android: '0',
+        android: '10',
         default: '0',
       })}
     >

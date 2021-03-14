@@ -1,9 +1,10 @@
 import React, {useState, useRef} from 'react';
 import DatePickerStyles from './DatePickerStyles';
 import {faLongArrowAltRight} from '@fortawesome/free-solid-svg-icons';
-import {View, Button, Platform} from 'react-native';
+import {View, Button, Platform, StyleSheet} from 'react-native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import HomeAppBarStyles from '../../pages/Home/HomeAppBarStyles';
 
 const DatePicker = (props) => {
   const {date, maximumDate, minimumDate, onUpdate} = props;
@@ -28,7 +29,8 @@ const DatePicker = (props) => {
   );
 };
 
-export default function DateRangePicker() {
+export default function DateRangePicker(props) {
+  const {show} = props;
   const now = Date.now();
   const twoWeeks = 14 * 24 * 60 * 60 * 1000;
 
@@ -62,7 +64,10 @@ export default function DateRangePicker() {
       )}
       <FontAwesomeIcon
         icon={faLongArrowAltRight}
-        style={DatePickerStyles.filterIcon}
+        style={StyleSheet.flatten([
+          DatePickerStyles.filterIcon,
+          show ? {} : {display: 'none'},
+        ])}
         size={20}
       />
       {isAndroid && (

@@ -4,11 +4,16 @@ import Geolocation from '@react-native-community/geolocation';
 import {View, Alert} from 'react-native';
 import mapStyles from './MapStyles';
 import SearchBar from '../SearchBar';
+import {DEFAULT_COORDS_LONG, DEFAULT_COORDS_LAT} from '@env';
 import realm from '../../realm';
 
 //Convert returned geolocation position to [long,lat] array
 const _getLongLat = (position) => {
   return [position.coords.longitude, position.coords.latitude];
+};
+
+const _getDefaultCoords = () => {
+  return [parseFloat(DEFAULT_COORDS_LONG), parseFloat(DEFAULT_COORDS_LAT)];
 };
 
 export default function MapView() {
@@ -28,16 +33,18 @@ export default function MapView() {
   );
 
   React.useEffect(() => {
-    Geolocation.getCurrentPosition(
-      (position) => {
-        setUserPosition(_getLongLat(position));
-      },
-      (error) => Alert.alert('Error', JSON.stringify(error)),
-      {
-        enableHighAccuracy: true,
-        useSignificantChanges: true,
-      },
-    );
+    (async () => {
+      await Geolocation.getCurrentPosition(
+        (position) => {
+          setUserPosition(_getLongLat(position));
+        },
+        (error) => Alert.alert('Error', JSON.stringify(error)),
+        {
+          enableHighAccuracy: true,
+          useSignificantChanges: true,
+        },
+      );
+    })();
   }, []);
 
   //On Unmount clear watchid
@@ -52,8 +59,9 @@ export default function MapView() {
       <MapboxGL.MapView style={mapStyles.map}>
         <MapboxGL.Camera
           zoomLevel={16}
-          coordinate={userPosition}
-          centerCoordinate={markerItem ? markerItem.coords : userPosition}
+          centerCoordinate={
+            markerItem ? markerItem.coords : _getDefaultCoords()
+          }
         />
         <MapboxGL.PointAnnotation
           id={'user-location'}
@@ -65,8 +73,8 @@ export default function MapView() {
         />
       </MapboxGL.MapView>
       <SearchBar
-        limit={10}
-        userCoords={userPosition}
+        limit={5}
+        userCoords={userPosition || _getDefaultCoords()}
         onSearchSelected={setMarkerItem}
       />
     </View>

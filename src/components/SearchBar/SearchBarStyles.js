@@ -3,10 +3,17 @@ import {StyleSheet, Platform} from 'react-native';
 export default StyleSheet.create({
   container: {
     position: 'absolute',
-    bottom: '10%',
     width: '100%',
     alignItems: 'center',
     justifyContent: 'center',
+    ...Platform.select({
+      ios: {
+        bottom: '10%',
+      },
+      android: {
+        bottom: '5%',
+      },
+    }),
   },
   searchItem: {
     margin: 3,
@@ -14,6 +21,7 @@ export default StyleSheet.create({
     backgroundColor: 'rgba(139,146,132, 0.2)',
     borderColor: 'gray',
     borderRadius: 10,
+    width: '100%',
   },
   searchList: {
   },
@@ -22,17 +30,13 @@ export default StyleSheet.create({
   },
   searchInput: {
     width: '80%',
-    fontSize: 15,
+    fontSize: 12,
     ...Platform.select({
       ios: {
-        margin: 10,
+        margin: '3%',
       },
       android: {
         margin: 0,
-      },
-      default: {
-        width: '80%',
-        margin: 5,
       },
     }),
   },
@@ -44,9 +48,9 @@ export default StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: 'white',
-    borderRadius: 50,
+    borderRadius: 10,
     borderColor: 'rgb(6,69,173)',
     borderWidth: 1,
-    paddingLeft: 2,
+    paddingLeft: '1%',
   },
 });
