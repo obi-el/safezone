@@ -16,7 +16,8 @@ const _getDefaultCoords = () => {
   return [parseFloat(DEFAULT_COORDS_LONG), parseFloat(DEFAULT_COORDS_LAT)];
 };
 
-export default function MapView() {
+export default function MapView(props) {
+  const {shouldStoreLocation} = props;
   const [markerItem, setMarkerItem] = React.useState(null);
   const [userPosition, setUserPosition] = React.useState(null);
 

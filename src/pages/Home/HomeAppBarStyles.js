@@ -11,8 +11,8 @@ export default StyleSheet.create({
     bottom: '15%',
   },
   settingsIcon: {
-    flex: 1,
-    marginLeft: 10,
+    marginLeft: '10%',
+    alignSelf: 'center',
     color: 'rgb(6,69,173)',
   },
 });
